@@ -23,59 +23,58 @@ auth.set_access_token(access_key,access_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True)
 client = tweepy.Client(bearer_token,wait_on_rate_limit=True)
 
+usernames = ["cassiuswinston","Cademac_12","Hesifambryson","_Greatest_Ever1","evinawestbrook"]
+number_of_tweets = 30
+
 def main():
 
-  # usernames =  ["DianaTaurasi","s10bird","jewellloyd","breannastewart","skydigg4", "brittneygriner","de11edonne","_AJAWILSON22","nnekaogwumike","kaymac_2123","chelsea_dungee","dijonaivictoria","deauzya","breezyyy14","eweezy_for3eezy","T_Cloud4","kelseyplum10","bigmamastef","slletget","werofierro","calvo05oficial","quiotosamir","hopesolo","sydneyleroux","sincy12","julieertz","mpinoe","alexmorgan13","carlilloyd","christenpress","lindseyhoran","amyrodriguez8","sarah_luebbe","sebastianaho","jhugh86"]
+  for username in usernames:
+    getData(username)
 
-  usernames =  ["DianaTaurasi","s10bird"]
-  number_of_tweets = 5
-
-  for uname in usernames:
-
-    username = uname
+def getData(username):
     
-    # Get a X amount of Tweets from the specified user
-    tweet_IDs = getPaginatedTweets(username, number_of_tweets)
+  # Get a X amount of Tweets from the specified user
+  tweet_IDs = getPaginatedTweets(username, number_of_tweets)
 
-    # get last Tweet for reference in replies request (i.e. get repliese since this last Tweet)
-    lastTweetId = tweet_IDs[len(tweet_IDs)-1]
-    print("Last Tweet ID: ", lastTweetId)
+  # get last Tweet for reference in replies request (i.e. get repliese since this last Tweet)
+  lastTweetId = tweet_IDs[len(tweet_IDs)-1]
+  print("Last Tweet ID: ", lastTweetId)
 
-    # get replies
-    repliers = getPaginatedReplies(lastTweetId)
+  # get replies
+  repliers = getPaginatedReplies(lastTweetId)
+
+  replierCount = 0
   
-    replierCount = 0
-    
-    for fan in repliers:
-      replierCount += 1
+  for fan in repliers:
+    replierCount += 1
+
+  print("Reply Count ", replierCount)
+
+  # Get all retweeters of each Tweet
+  retweeters = getPaginatedRts(tweet_IDs)
+
+  retweetersCount = 0
   
-    print("Reply Count ", replierCount)
+  for fan in retweeters:
+    retweetersCount += 1
+
+  print("Retweet Count ", retweetersCount)
+
+  # Get all likers of each Tweet
+  likers = getPaginatedLikes(tweet_IDs)
+
+  likersCount = 0
   
-    # Get all retweeters of each Tweet
-    retweeters = getPaginatedRts(tweet_IDs)
-  
-    retweetersCount = 0
-    
-    for fan in retweeters:
-      retweetersCount += 1
-  
-    print("Retweet Count ", retweetersCount)
-  
-    # Get all likers of each Tweet
-    likers = getPaginatedLikes(tweet_IDs)
-  
-    likersCount = 0
-    
-    for fan in likers:
-      likersCount += 1
-  
-    print("Liker Count ", likersCount)
-  
-    print("----- STORING FAN DATA -----")
-    data = []
-  
-    # Add this fan and their data to the "Data" list
-    data.append([username, likersCount, retweetersCount, replierCount])
+  for fan in likers:
+    likersCount += 1
+
+  print("Liker Count ", likersCount)
+
+  print("----- STORING FAN DATA -----")
+  data = []
+
+  # Add this fan and their data to the "Data" list
+  data.append([username, likersCount, retweetersCount, replierCount])
       
   # Convert the "Data" list to a spreadsheet
   toCsv(data)
