@@ -3,5 +3,18 @@
   "access_secret": "#",
   "api_key":"#",
   "api_key_secret":"#",
-  "bearer_token":"#"
+  "bearer_token":"#",
+
+  "access_token_2": "#",
+  "access_secret_2": "#",
+  "api_key_2":"#",
+  "api_key_secret_2":"#",
+  "bearer_token_2":"#",
+
+  "access_token_3": "#",
+  "access_secret_3": "#",
+  "api_key_3":"#",
+  "api_key_secret_3":"#",
+  "bearer_token_3":"#"
+  
 }
