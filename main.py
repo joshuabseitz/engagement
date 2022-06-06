@@ -193,6 +193,9 @@ def getPaginatedTweets(username, number_of_tweets):
       continue
     except tweepy.errors.NotFound:
       break
+    except tweepy.errors.Forbidden:
+      print("        - Forbidden")
+      break
     except:
       time.sleep(900)
       switchAPI()
@@ -213,12 +216,16 @@ def getRetweets(tweetIdList):
         break
       except tweepy.errors.Unauthorized:
         print("        - Unauthorized")
+        switchAPI()
         break
       except tweepy.errors.TooManyRequests:
         print(("        - Too many requests... switching creds"))
         switchAPI()
         continue
       except tweepy.errors.NotFound:
+        break
+      except tweepy.errors.Forbidden:
+        print("        - Forbidden")
         break
       except:
         time.sleep(900)
@@ -241,12 +248,16 @@ def getLikes(tweetIdList):
         break
       except tweepy.errors.Unauthorized:
         print("        - Unauthorized")
+        switchAPI()
         break
       except tweepy.errors.TooManyRequests:
         print(("        - Too many requests... switching creds"))
         switchAPI()
         continue
       except tweepy.errors.NotFound:
+        break
+      except tweepy.errors.Forbidden:
+        print("        - Forbidden")
         break
       except:
         time.sleep(900)
@@ -271,12 +282,16 @@ def getReplies(tweetIDList):
         break
       except tweepy.errors.Unauthorized:
         print("        - Unauthorized")
+        switchAPI()
         break
       except tweepy.errors.TooManyRequests:
         print(("        - Too many requests... switching creds"))
         switchAPI()
         continue
       except tweepy.errors.NotFound:
+        break
+      except tweepy.errors.Forbidden:
+        print("        - Forbidden")
         break
       except:
         time.sleep(900)
@@ -303,6 +318,9 @@ def getFollowerCount(fan):
       print(("        - Too many requests... switching creds"))
       switchAPI()
       continue
+    except tweepy.errors.Forbidden:
+      print("        - Forbidden")
+      break
     except tweepy.errors.NotFound:
       break
     except:
