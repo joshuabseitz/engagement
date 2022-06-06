@@ -23,6 +23,7 @@ consumer_secret=inputs["api_key_secret"]
 access_key=inputs["access_token"]
 access_secret=inputs["access_secret"]
 bearer_token=inputs["bearer_token"]
+currentAPI = 1
 
 # API INIT
 auth = tweepy.OAuthHandler(consumer_key,consumer_secret)
@@ -81,6 +82,7 @@ def switchAPI():
   global apiSwitchCount
   global file
   global inputs
+  global currentAPI
 
   if apiSwitchCount==0:
     
@@ -94,6 +96,7 @@ def switchAPI():
     init(consumer_key, consumer_secret, access_key,access_secret,bearer_token)
 
     print("                - API Creds 1")
+    currentAPI = 1
     apiSwitchCount +=1
     
   elif apiSwitchCount == 1:
@@ -108,6 +111,7 @@ def switchAPI():
     init(consumer_key, consumer_secret, access_key,access_secret,bearer_token)
     
     print("                - API Creds 2")
+    currentAPI = 2
     apiSwitchCount += 1
     
   elif apiSwitchCount == 2:
@@ -122,6 +126,7 @@ def switchAPI():
     init(consumer_key, consumer_secret, access_key,access_secret,bearer_token)
     
     print("                - API Creds 3")
+    currentAPI = 3
     apiSwitchCount = 0
 
 def getData(username):
@@ -184,16 +189,24 @@ def getPaginatedTweets(username, number_of_tweets):
                                  count=200).items(number_of_tweets):
         tweetIdList.append(tweet.id)
       break
-    except tweepy.errors.Unauthorized:
+    except tweepy.errors.Unauthorized as e:
       print("        - Unauthorized")
+      print("        - Current API Creds: ", currentAPI)
+      print("        - Error: ", e)
       break
-    except tweepy.errors.TooManyRequests:
+    except tweepy.errors.TooManyRequests as e:
       print(("        - Too many requests... switching creds"))
+      print("        - Current API Creds: ", currentAPI)
+      print("        - Error: ", e)
       switchAPI()
       continue
-    except tweepy.errors.NotFound:
+    except tweepy.errors.NotFound as e:
+      print("        - Current API Creds: ", currentAPI)
+      print("        - Error: ", e)
       break
-    except tweepy.errors.Forbidden:
+    except tweepy.errors.Forbidden as e:
+      print("        - Current API Creds: ", currentAPI)
+      print("        - Error: ", e)
       print("        - Forbidden")
       break
     except:
@@ -214,15 +227,21 @@ def getRetweets(tweetIdList):
         tweet = api.get_status(tweet)
         retweets += tweet.retweet_count
         break
-      except tweepy.errors.Unauthorized:
+      except tweepy.errors.Unauthorized as e:
         print("        - Unauthorized")
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
         switchAPI()
         break
-      except tweepy.errors.TooManyRequests:
+      except tweepy.errors.TooManyRequests as e:
         print(("        - Too many requests... switching creds"))
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
         switchAPI()
         continue
-      except tweepy.errors.NotFound:
+      except tweepy.errors.NotFound as e:
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
         break
       except:
         time.sleep(900)
@@ -243,15 +262,20 @@ def getLikes(tweetIdList):
         tweet = api.get_status(tweet)
         likes += tweet.favorite_count
         break
-      except tweepy.errors.Unauthorized:
+      except tweepy.errors.Unauthorized as e:
+        print("        - Current API Creds: ", currentAPI)
         print("        - Unauthorized")
         switchAPI()
         break
-      except tweepy.errors.TooManyRequests:
+      except tweepy.errors.TooManyRequests as e:
         print(("        - Too many requests... switching creds"))
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
         switchAPI()
         continue
-      except tweepy.errors.NotFound:
+      except tweepy.errors.NotFound as e:
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
         break
       except:
         time.sleep(900)
@@ -274,15 +298,20 @@ def getReplies(tweetIDList):
         tweet = client_result.data
         replies += tweet.public_metrics["reply_count"]
         break
-      except tweepy.errors.Unauthorized:
+      except tweepy.errors.Unauthorized as e:
         print("        - Unauthorized")
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
         switchAPI()
         break
-      except tweepy.errors.TooManyRequests:
+      except tweepy.errors.TooManyRequests as e:
         print(("        - Too many requests... switching creds"))
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
         switchAPI()
         continue
-      except tweepy.errors.NotFound:
+      except tweepy.errors.NotFound as e:
+        print("        - Error: ", e)
         break
       except:
         time.sleep(900)
@@ -302,17 +331,25 @@ def getFollowerCount(fan):
       user = api.get_user(screen_name=fan)
       followers = user.followers_count
       break
-    except tweepy.errors.Unauthorized:
+    except tweepy.errors.Unauthorized as e:
       print("        - Unauthorized")
+      print("        - Current API Creds: ", currentAPI)
+      print("        - Error: ", e)
       break
-    except tweepy.errors.TooManyRequests:
+    except tweepy.errors.TooManyRequests as e:
       print(("        - Too many requests... switching creds"))
+      print("        - Current API Creds: ", currentAPI)
+      print("        - Error: ", e)
       switchAPI()
       continue
-    except tweepy.errors.Forbidden:
+    except tweepy.errors.Forbidden as e:
       print("        - Forbidden")
+      print("        - Current API Creds: ", currentAPI)
+      print("        - Error: ", e)
       break
-    except tweepy.errors.NotFound:
+    except tweepy.errors.NotFound as e:
+      print("        - Current API Creds: ", currentAPI)
+      print("        - Error: ", e)
       break
     except:
       time.sleep(900)
