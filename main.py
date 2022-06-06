@@ -224,9 +224,6 @@ def getRetweets(tweetIdList):
         continue
       except tweepy.errors.NotFound:
         break
-      except tweepy.errors.Forbidden:
-        print("        - Forbidden")
-        break
       except:
         time.sleep(900)
         switchAPI()
@@ -255,9 +252,6 @@ def getLikes(tweetIdList):
         switchAPI()
         continue
       except tweepy.errors.NotFound:
-        break
-      except tweepy.errors.Forbidden:
-        print("        - Forbidden")
         break
       except:
         time.sleep(900)
@@ -289,9 +283,6 @@ def getReplies(tweetIDList):
         switchAPI()
         continue
       except tweepy.errors.NotFound:
-        break
-      except tweepy.errors.Forbidden:
-        print("        - Forbidden")
         break
       except:
         time.sleep(900)
