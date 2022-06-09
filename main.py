@@ -133,21 +133,31 @@ def getData(username):
 
   # START Time
   start = datetime.now().time()
+
+  credentialsUsed = []
     
   # Get a X amount of Tweets from the specified user
   tweet_IDs = getPaginatedTweets(username, number_of_tweets)
-
+  credentialsUsed.append(currentAPI)
+  
   statusMetrics = getStatusMetrics(tweet_IDs)
+  credentialsUsed.append(currentAPI)
+  
+  followerCount = getFollowerCount(username)
+  credentialsUsed.append(currentAPI)
+  
+  replyCount = getReplies(tweet_IDs)
+  credentialsUsed.append(currentAPI)
 
   userMetrics = [username,
-                 getFollowerCount(username),
+                 followerCount,
                  statusMetrics[0],
                  statusMetrics[1],
-                 getReplies(tweet_IDs),
+                 replyCount,
                  start,
                  datetime.now().time(),
                  number_of_tweets,
-                currentAPI]
+                 credentialsUsed]
 
   # Add this fan and their data to the "Data" list
   data.append(userMetrics)
