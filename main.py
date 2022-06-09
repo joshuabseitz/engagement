@@ -137,10 +137,12 @@ def getData(username):
   # Get a X amount of Tweets from the specified user
   tweet_IDs = getPaginatedTweets(username, number_of_tweets)
 
+  statusMetrics = getStatusMetrics(tweet_IDs)
+
   userMetrics = [username,
                  getFollowerCount(username),
-                 getLikes(tweet_IDs),
-                 getRetweets(tweet_IDs),
+                 statusMetrics[0],
+                 statusMetrics[1],
                  getReplies(tweet_IDs),
                  start,
                  datetime.now().time(),
@@ -265,8 +267,9 @@ def getLikes(tweetIdList):
         likes += tweet.favorite_count
         break
       except tweepy.errors.Unauthorized as e:
-        print("        - Current API Creds: ", currentAPI)
         print("        - Unauthorized")
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
         switchAPI()
         break
       except tweepy.errors.TooManyRequests as e:
@@ -285,6 +288,44 @@ def getLikes(tweetIdList):
   
   print("        - ", likes, " Likes")
   return(likes)
+
+def getStatusMetrics(tweetIdList):
+
+  likes = 0
+  retweets = 0
+  
+  print("    - Counting favorites and retweets...")
+  for tweet in tweetIdList:
+    
+    while True:
+      try:
+        tweet = api.get_status(tweet)
+        likes += tweet.favorite_count
+        retweets += tweet.retweet_count
+        break
+      except tweepy.errors.Unauthorized as e:
+        print("        - Unauthorized")
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
+        switchAPI()
+        break
+      except tweepy.errors.TooManyRequests as e:
+        print(("        - Too many requests... switching creds"))
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
+        switchAPI()
+        continue
+      except tweepy.errors.NotFound as e:
+        print("        - Current API Creds: ", currentAPI)
+        print("        - Error: ", e)
+        break
+      except:
+        time.sleep(900)
+        switchAPI()
+        
+  print("        - ", likes, " Likes")
+  print("        - ", retweets, " Retweets")
+  return([likes,retweets])
 
 def getReplies(tweetIDList):
 
