@@ -144,7 +144,8 @@ def getData(username):
                  getReplies(tweet_IDs),
                  start,
                  datetime.now().time(),
-                 number_of_tweets]
+                 number_of_tweets,
+                currentAPI]
 
   # Add this fan and their data to the "Data" list
   data.append(userMetrics)
@@ -165,7 +166,8 @@ def toCsv(data, username):
                    "Total Replies",
                    "Start Time",
                    "End Time",
-                   "Number of Tweets Evaluated"])
+                   "Number of Tweets Evaluated",
+                  "API Credentials Set"])
 
   # write a new row for each fan and their data
   for fan in data:
